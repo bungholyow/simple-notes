@@ -16,11 +16,11 @@ exports.beranda = async (req, res) => {
 /* GET /
 about 
 */
-exports.about = async (req, res) => {
+exports.tentang = async (req, res) => {
   const locals = {
-    title: "About Us",
-    description: "About us...",
+    title: "tentang notes",
+    description: "tentang notes...",
   };
 
-  res.render("about", locals);
+  res.render("tentang", locals);
 };
