@@ -50,19 +50,19 @@ exports.dashbor = async (req, res) => {
  * GET /
  * View Specific Note
  */
-exports.dashboardViewNote = async (req, res) => {
+exports.dashborTampilNote = async (req, res) => {
   const note = await Note.findById({ _id: req.params.id })
     .where({ user: req.user.id })
     .lean();
 
   if (note) {
-    res.render("dashboard/view-note", {
+    res.render("dashbor/lihat-note", {
       noteID: req.params.id,
       note,
-      layout: "../views/layouts/dashboard",
+      layout: "../views/layouts/dashbor",
     });
   } else {
-    res.send("Something went wrong.");
+    res.send("Terjadi kesalahan.");
   }
 };
 
@@ -70,13 +70,13 @@ exports.dashboardViewNote = async (req, res) => {
  * PUT /
  * Update Specific Note
  */
-exports.dashboardUpdateNote = async (req, res) => {
+exports.dashborUpdetNote = async (req, res) => {
   try {
     await Note.findOneAndUpdate(
       { _id: req.params.id },
       { title: req.body.title, body: req.body.body, updatedAt: Date.now() }
     ).where({ user: req.user.id });
-    res.redirect("/dashboard");
+    res.redirect("/dashbor");
   } catch (error) {
     console.log(error);
   }
@@ -86,10 +86,10 @@ exports.dashboardUpdateNote = async (req, res) => {
  * DELETE /
  * Delete Note
  */
-exports.dashboardDeleteNote = async (req, res) => {
+exports.dashborHapusNote = async (req, res) => {
   try {
     await Note.deleteOne({ _id: req.params.id }).where({ user: req.user.id });
-    res.redirect("/dashboard");
+    res.redirect("/dashbor");
   } catch (error) {
     console.log(error);
   }
@@ -99,7 +99,7 @@ exports.dashboardDeleteNote = async (req, res) => {
  * GET /
  * Add Notes
  */
-exports.dashboardAddNote = async (req, res) => {
+exports.dashborAddNote = async (req, res) => {
   res.render("dashbor/tambah", {
     layout: "../views/layouts/dashbor",
   });
@@ -109,7 +109,7 @@ exports.dashboardAddNote = async (req, res) => {
  * POST /
  * Add Notes
  */
-exports.dashboardAddNoteSubmit = async (req, res) => {
+exports.dashborAddNoteSubmit = async (req, res) => {
   try {
     req.body.user = req.user.id;
     await Note.create(req.body);
@@ -123,11 +123,11 @@ exports.dashboardAddNoteSubmit = async (req, res) => {
  * GET /
  * Search
  */
-exports.dashboardSearch = async (req, res) => {
+exports.dashborCari = async (req, res) => {
   try {
-    res.render("dashboard/search", {
+    res.render("dashbor/search", {
       searchResults: "",
-      layout: "../views/layouts/dashboard",
+      layout: "../views/layouts/dashbor",
     });
   } catch (error) {}
 };
@@ -136,7 +136,7 @@ exports.dashboardSearch = async (req, res) => {
  * POST /
  * Search For Notes
  */
-exports.dashboardSearchSubmit = async (req, res) => {
+exports.dashborCariSubmit = async (req, res) => {
   try {
     let searchTerm = req.body.searchTerm;
     const searchNoSpecialChars = searchTerm.replace(/[^a-zA-Z0-9 ]/g, "");
@@ -148,9 +148,9 @@ exports.dashboardSearchSubmit = async (req, res) => {
       ],
     }).where({ user: req.user.id });
 
-    res.render("dashboard/search", {
+    res.render("dashbor/cari", {
       searchResults,
-      layout: "../views/layouts/dashboard",
+      layout: "../views/layouts/dashbor",
     });
   } catch (error) {
     console.log(error);
